@@ -1,19 +1,26 @@
 import React from 'react';
+import { useNavigation } from '@react-navigation/native';
 
-import * as S from './styles';
+import { Container, Icon, TitleArea, Title } from './styles';
 
 interface IHeaderProps {
   title: string;
 }
 
 const Header: React.FC<IHeaderProps> = ({ title }) => {
+  const navigation = useNavigation();
+
   return (
-    <S.Container>
-      <S.IconReturn />
-      <S.TitleArea>
-        <S.Title>{title}</S.Title>
-      </S.TitleArea>
-    </S.Container>
+    <Container>
+      <Icon
+        name="chevron-left"
+        size={40}
+        onPress={() => navigation.reset({ routes: [{ name: 'Home' }] })}
+      />
+      <TitleArea>
+        <Title>{title}</Title>
+      </TitleArea>
+    </Container>
   );
 };
 
