@@ -6,9 +6,24 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Preload from '~/pages/Preload';
 import Home from '~/pages/Home';
 import About from '~/pages/About';
+import Edit from '~/pages/Edit';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+
+function EditScreen() {
+  return (
+    <Stack.Navigator
+      initialRouteName="Home"
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="Edit" component={Edit} />
+    </Stack.Navigator>
+  );
+}
 
 function BottomTabs() {
   return (
@@ -21,7 +36,7 @@ function BottomTabs() {
         },
       }}
     >
-      <Tab.Screen name="Contatos" component={Home} />
+      <Tab.Screen name="Contatos" component={EditScreen} />
       <Tab.Screen name="Detalhes" component={About} />
     </Tab.Navigator>
   );

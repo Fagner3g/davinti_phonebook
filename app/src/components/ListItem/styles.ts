@@ -16,6 +16,7 @@ export const LeftActionArea = styled.View`
 export const RightActionArea = styled.View`
   background: #ff0000;
   justify-content: center;
+  height: 100%;
 `;
 
 export const TextLeft = styled.Text`

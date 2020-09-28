@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FlatList } from 'react-native';
+import Modal from 'react-native-modal';
 
 import ListItem from '~/components/ListItem';
 
-import { Container, Separator } from './styles';
+import * as S from './styles';
 
 const Home: React.FC = () => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
   const contatos = [
     { id: '1', name: 'Fagner Egidio Gomes', ages: '29', phone: '31971697646' },
     { id: '2', name: 'Lucas', ages: '29', phone: '31971697646' },
@@ -14,21 +17,42 @@ const Home: React.FC = () => {
     { id: '5', name: 'Leonardo', ages: '29', phone: '31971697646' },
   ];
 
+  function QuizModal() {
+    return (
+      <Modal isVisible={isModalVisible}>
+        <S.ModalArea>
+          <S.Text size="17px">
+            Tem certeza que deseja excluir este contato?
+          </S.Text>
+          <S.ButtonArea>
+            <S.Button text="Sim" color="#399e2d" onPress={() => {}} />
+            <S.Button
+              text="Não"
+              color="#ff4c4c"
+              onPress={() => setIsModalVisible(!isModalVisible)}
+            />
+          </S.ButtonArea>
+        </S.ModalArea>
+      </Modal>
+    );
+  }
+
   return (
-    <Container>
+    <S.Container>
+      <QuizModal />
       <FlatList
         data={contatos}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <ListItem
             data={item}
-            handleLeft={() => alert('Editando contatos')}
-            handleRight={() => alert('Excluir contato')}
+            handleLeft={() => alert('Excluir contato')}
+            handleRight={() => setIsModalVisible(!isModalVisible)}
           />
         )}
-        ItemSeparatorComponent={() => <Separator />}
+        ItemSeparatorComponent={() => <S.Separator />}
       />
-    </Container>
+    </S.Container>
   );
 };
 

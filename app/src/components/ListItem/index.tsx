@@ -20,8 +20,8 @@ export interface IListItem {
 
 interface IProps {
   data: IListItem;
-  handleLeft: () => null;
-  handleRight: () => null;
+  handleLeft: () => void;
+  handleRight: () => void;
 }
 
 const ListItem: React.FC<IProps> = ({ data, handleLeft, handleRight }) => {
