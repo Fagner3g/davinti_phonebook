@@ -7,5 +7,3 @@ export const Container = styled.View`
 `;
 
 export const Logo = styled.Image``;
-
-export const Text = styled.Text``;
