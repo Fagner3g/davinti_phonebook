@@ -22,6 +22,7 @@ interface IProps {
   data: IListItem;
   handleLeft: () => void;
   handleRight: () => void;
+  onPress: () => void;
 }
 
 const ListItem: React.FC<IProps> = ({ data, handleLeft, handleRight }) => {

@@ -1,12 +1,13 @@
 import React from 'react';
-import { View } from 'react-native';
-import Text from '~/components/Text';
 
+import Text from '~/components/Text';
+import Header from '~/components/Header';
 import { Container } from './styles';
 
 const Edit: React.FC = () => {
   return (
     <Container>
+      <Header title="Detalhes" />
       <Text>Editar contato</Text>
     </Container>
   );

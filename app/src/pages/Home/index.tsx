@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { FlatList } from 'react-native';
 import Modal from 'react-native-modal';
+import { useNavigation } from '@react-navigation/native';
 
 import ListItem from '~/components/ListItem';
 
 import * as S from './styles';
 
 const Home: React.FC = () => {
+  const navigation = useNavigation();
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const contatos = [
@@ -46,8 +48,9 @@ const Home: React.FC = () => {
         renderItem={({ item }) => (
           <ListItem
             data={item}
-            handleLeft={() => alert('Excluir contato')}
+            handleLeft={() => navigation.navigate('Edit')}
             handleRight={() => setIsModalVisible(!isModalVisible)}
+            onPress={() => navigation.navigate('Edit')}
           />
         )}
         ItemSeparatorComponent={() => <S.Separator />}
