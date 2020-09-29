@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import AsyncStorage from '@react-native-community/async-storage';
+import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
 import Text from '~/components/Text';
@@ -11,7 +10,9 @@ const Preload: React.FC = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      navigation.reset({ routes: [{ name: 'Home' }] });
+      navigation.reset({
+        routes: [{ name: 'Home' }],
+      });
     }, 3000);
   }, []);
 

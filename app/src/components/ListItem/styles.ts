@@ -5,6 +5,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 export const Container = styled.TouchableOpacity`
   background: #fff;
   padding: 15px 20px;
+  min-height: 70px;
 `;
 
 export const TextArea = styled.View``;

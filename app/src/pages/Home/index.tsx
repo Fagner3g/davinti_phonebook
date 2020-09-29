@@ -1,23 +1,47 @@
-import React, { useState } from 'react';
-import { FlatList, Linking, Platform } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { FlatList, Linking } from 'react-native';
 import Modal from 'react-native-modal';
 import { useNavigation } from '@react-navigation/native';
+import api from '~/services';
 
 import ListItem from '~/components/ListItem';
 
 import * as S from './styles';
 
+export interface IContatoProps {
+  id: number;
+  nome: string;
+  idade: string;
+  telefones: [
+    {
+      id: number;
+      contato_id: number;
+      telefone: string;
+    }
+  ];
+}
+
 const Home: React.FC = () => {
   const navigation = useNavigation();
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [contatos, setContatos] = useState<IContatoProps[]>();
 
-  const contatos = [
-    { id: '1', name: 'Fagner Egidio Gomes', ages: '29', phone: '31971697646' },
-    { id: '2', name: 'Lucas', ages: '29', phone: '31971697646' },
-    { id: '3', name: 'Fernando', ages: '29', phone: '31971697646' },
-    { id: '4', name: 'Carlos', ages: '29', phone: '31971697646' },
-    { id: '5', name: 'Leonardo', ages: '29', phone: '31971697646' },
-  ];
+  useEffect(() => {
+    getContatos();
+  }, []);
+
+  async function getContatos() {
+    await api
+      .get('/contato')
+      .then(({ data }) => {
+        setContatos(data);
+      })
+      .catch((err) => {
+        alert(
+          'Parece que você não está conectado ao servidor ou temos um problema para encontra-lo'
+        );
+      });
+  }
 
   function QuizModal() {
     return (
@@ -44,7 +68,7 @@ const Home: React.FC = () => {
       <QuizModal />
       <FlatList
         data={contatos}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => `${item.id}`}
         renderItem={({ item }) => (
           <ListItem
             data={item}
@@ -54,7 +78,7 @@ const Home: React.FC = () => {
                 routes: [{ name: 'Details', params: { item, edit: true } }],
               })
             }
-            onPress={() => Linking.openURL(`tel://${item.phone}`)}
+            onPress={() => Linking.openURL(`tel://${item.telefones[0]}`)}
           />
         )}
         ItemSeparatorComponent={() => <S.Separator />}

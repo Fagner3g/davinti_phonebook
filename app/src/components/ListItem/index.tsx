@@ -1,6 +1,7 @@
 import React from 'react';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { Animated, TouchableOpacity } from 'react-native';
+import { IContatoProps } from '~/pages/Home';
 
 import Text from '~/components/Text';
 import {
@@ -13,15 +14,8 @@ import {
   Icon,
 } from './styles';
 
-export interface IListItem {
-  id: string;
-  name: string;
-  ages?: string;
-  phone?: string;
-}
-
 interface IProps {
-  data: IListItem;
+  data: IContatoProps;
   handleLeft: () => void;
   handleRight: () => void;
   onPress: () => void;
@@ -83,8 +77,14 @@ const ListItem: React.FC<IProps> = ({
     >
       <Container onPress={onPress}>
         <TextArea>
-          <Text size="17px">{data.name}</Text>
-          <PhoneMask value={data.phone} type="cel-phone" editable={false} />
+          <Text size="17px">{data.nome}</Text>
+          {data.telefones[0]?.telefone && (
+            <PhoneMask
+              value={data.telefones[0].telefone}
+              type="cel-phone"
+              editable={false}
+            />
+          )}
         </TextArea>
       </Container>
     </Swipeable>
