@@ -8,7 +8,7 @@ export const Input = styled(InputBase)`
   margin-top: 10px;
 `;
 
-export const InputArea = styled.SafeAreaView`
+export const InputArea = styled.View`
   margin: 10px;
 `;
 

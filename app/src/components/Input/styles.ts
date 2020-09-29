@@ -18,6 +18,7 @@ export const InputMask = styled(TextInputMask)<TextInputMaskProps>`
   margin-left: 20px;
   padding: 10px;
   font-size: 15px;
+  width: 73%;
 `;
 
 export const TextInput = styled.TextInput`
@@ -26,7 +27,18 @@ export const TextInput = styled.TextInput`
   font-size: 15px;
 `;
 
-export const Icon = styled(MaterialIcons)``;
+export const IconDelArea = styled.View`
+  flex-direction: row;
+  width: 100%;
+  position: absolute;
+  justify-content: flex-end;
+  padding-right: 7px;
+`;
+
+export const Icon = styled(MaterialIcons)`
+  font-size: 30px;
+  margin: 5px;
+`;
 
 export const Label = styled(TextBase)`
   margin: 5px;
