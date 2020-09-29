@@ -10,6 +10,7 @@ import {
   TextLeft,
   RightActionArea,
   PhoneMask,
+  Icon,
 } from './styles';
 
 export interface IListItem {
@@ -43,7 +44,9 @@ const ListItem: React.FC<IProps> = ({
 
     return (
       <LeftActionArea>
-        <TextAnimated style={{ transform: [{ scale }] }}>Editar</TextAnimated>
+        <TextAnimated style={{ transform: [{ scale }] }}>
+          <Icon name="edit" />
+        </TextAnimated>
       </LeftActionArea>
     );
   }
@@ -59,7 +62,7 @@ const ListItem: React.FC<IProps> = ({
       <TouchableOpacity onPress={onPress}>
         <RightActionArea>
           <TextAnimated style={{ transform: [{ scale }] }}>
-            Excluir
+            <Icon name="delete" />
           </TextAnimated>
         </RightActionArea>
       </TouchableOpacity>

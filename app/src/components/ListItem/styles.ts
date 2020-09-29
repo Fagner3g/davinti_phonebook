@@ -1,5 +1,6 @@
 import styled from 'styled-components/native';
 import { TextInputMask } from 'react-native-masked-text';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 export const Container = styled.TouchableOpacity`
   background: #fff;
@@ -31,4 +32,8 @@ export const PhoneMask = styled(TextInputMask)`
   padding: 0px;
   font-size: 13px;
   color: #999;
+`;
+
+export const Icon = styled(MaterialIcons)`
+  font-size: 40px;
 `;
