@@ -33,7 +33,13 @@ class ContatoController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store({ request, response }) {}
+  async store({ request, response }) {
+    const data = request.only(['nome', 'idade'])
+
+    const contato = await Contato.create({ ...data })
+
+    return contato
+  }
 
   /**
    * Display a single contato.
