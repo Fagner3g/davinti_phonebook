@@ -12,6 +12,7 @@ interface Props extends TouchableOpacityProps {
   iconLeft?: string;
   iconRight?: string;
   iconColor?: string;
+  fullsize?: boolean;
 }
 
 const Button: React.FC<Props> = ({
@@ -21,10 +22,11 @@ const Button: React.FC<Props> = ({
   iconLeft,
   iconRight,
   iconColor,
+  fullsize,
   ...res
 }) => {
   return (
-    <Container {...res} color={color}>
+    <Container {...res} color={color} fullsize={fullsize}>
       {iconLeft && <IconMaterial name={iconLeft} size={24} color={iconColor} />}
       <Text color={textColor}>{text}</Text>
       {iconRight && (
