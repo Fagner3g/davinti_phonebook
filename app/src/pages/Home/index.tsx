@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, Linking, Platform } from 'react-native';
 import Modal from 'react-native-modal';
 import { useNavigation } from '@react-navigation/native';
 
@@ -50,11 +50,11 @@ const Home: React.FC = () => {
             data={item}
             handleRight={() => setIsModalVisible(!isModalVisible)}
             handleLeft={() =>
-              navigation.reset({ routes: [{ name: 'Details', params: item }] })
+              navigation.reset({
+                routes: [{ name: 'Details', params: { item, edit: true } }],
+              })
             }
-            onPress={() =>
-              navigation.reset({ routes: [{ name: 'Details', params: item }] })
-            }
+            onPress={() => Linking.openURL(`tel://${item.phone}`)}
           />
         )}
         ItemSeparatorComponent={() => <S.Separator />}

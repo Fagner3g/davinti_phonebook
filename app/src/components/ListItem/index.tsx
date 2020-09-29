@@ -9,6 +9,7 @@ import {
   LeftActionArea,
   TextLeft,
   RightActionArea,
+  PhoneMask,
 } from './styles';
 
 export interface IListItem {
@@ -25,7 +26,12 @@ interface IProps {
   onPress: () => void;
 }
 
-const ListItem: React.FC<IProps> = ({ data, handleLeft, handleRight }) => {
+const ListItem: React.FC<IProps> = ({
+  data,
+  handleLeft,
+  handleRight,
+  onPress,
+}) => {
   const TextAnimated = Animated.createAnimatedComponent(TextLeft);
 
   function RenderLeftActions(progress, dragX) {
@@ -72,10 +78,10 @@ const ListItem: React.FC<IProps> = ({ data, handleLeft, handleRight }) => {
         />
       )}
     >
-      <Container>
+      <Container onPress={onPress}>
         <TextArea>
           <Text size="17px">{data.name}</Text>
-          <Text size="13px">{data.phone}</Text>
+          <PhoneMask value={data.phone} type="cel-phone" editable={false} />
         </TextArea>
       </Container>
     </Swipeable>

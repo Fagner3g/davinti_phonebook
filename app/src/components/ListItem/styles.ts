@@ -1,6 +1,7 @@
 import styled from 'styled-components/native';
+import { TextInputMask } from 'react-native-masked-text';
 
-export const Container = styled.View`
+export const Container = styled.TouchableOpacity`
   background: #fff;
   padding: 15px 20px;
 `;
@@ -23,4 +24,11 @@ export const TextLeft = styled.Text`
   color: #fff;
   padding: 20px;
   font-size: 17px;
+`;
+
+export const PhoneMask = styled(TextInputMask)`
+  margin-top: 3px;
+  padding: 0px;
+  font-size: 13px;
+  color: #999;
 `;

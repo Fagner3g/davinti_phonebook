@@ -8,9 +8,8 @@ import Header from '~/components/Header';
 import { Container, InputArea, Input, Button } from './styles';
 
 const Details: React.FC = ({ route: { params } }) => {
-  const [isEditable, setIsEditable] = useState(false);
-
-  const { ages, name, phone } = params;
+  const { ages, name, phone } = params.item;
+  const [isEditable, setIsEditable] = useState(params.edit);
 
   function handleStateButton() {
     setIsEditable(!isEditable);
