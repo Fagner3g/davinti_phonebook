@@ -2,36 +2,10 @@
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
-/** @typedef {import('@adonisjs/framework/src/View')} View */
 
-/**
- * Resourceful controller for interacting with telefones
- */
+const Telefone = use('App/Models/Telefone')
+
 class TelefoneController {
-  /**
-   * Show a list of all telefones.
-   * GET telefones
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async index ({ request, response, view }) {
-  }
-
-  /**
-   * Render a form to be used for creating a new telefone.
-   * GET telefones/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
-  }
-
   /**
    * Create/save a new telefone.
    * POST telefones
@@ -40,7 +14,18 @@ class TelefoneController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store ({ request, response }) {
+  async store({ request, response }) {
+    const data = request.only(['contato_id', 'telefone'])
+
+    if (data.contato_id === null) {
+      return response
+        .status(401)
+        .send({ error: { message: 'Código do contato é obrigatório' } })
+    }
+
+    const telefone = await Telefone.create({ ...data })
+
+    return telefone
   }
 
   /**
@@ -52,20 +37,7 @@ class TelefoneController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
-  }
-
-  /**
-   * Render a form to update an existing telefone.
-   * GET telefones/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
-  }
+  async show({ params, request, response, view }) {}
 
   /**
    * Update telefone details.
@@ -75,7 +47,28 @@ class TelefoneController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
+  async update({ params, request, response }) {
+    try {
+      const telefone = await Telefone.findOrFail(params.id)
+
+      const data = request.only(['contato_id', 'telefone'])
+
+      if (data.contato_id === null) {
+        return response
+          .status(401)
+          .send({ error: { message: 'Código do contato é obrigatório' } })
+      }
+
+      telefone.merge(data)
+
+      await telefone.save()
+
+      return telefone
+    } catch (error) {
+      return response.status(error.status).send({
+        error: { message: 'Algo deu errado ao atualizar seus dados' }
+      })
+    }
   }
 
   /**
@@ -86,7 +79,16 @@ class TelefoneController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
+  async destroy({ params, response }) {
+    try {
+      const telefone = await Telefone.findOrFail(params.id)
+
+      await telefone.delete()
+    } catch (error) {
+      return response.status(error.status).send({
+        error: { message: 'Não conseguimos encontrar o id do telefone.' }
+      })
+    }
   }
 }
 

@@ -19,8 +19,8 @@ class ContatoController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index({ request, response, view }) {
-    const contatos = await Contato.all()
+  async index() {
+    const contatos = await Contato.query().with('telefones').fetch()
 
     return contatos
   }
@@ -34,11 +34,17 @@ class ContatoController {
    * @param {Response} ctx.response
    */
   async store({ request, response }) {
-    const data = request.only(['nome', 'idade'])
+    try {
+      const data = request.only(['nome', 'idade'])
 
-    const contato = await Contato.create({ ...data })
+      const contato = await Contato.create({ ...data })
 
-    return contato
+      return contato
+    } catch (error) {
+      return response.status(error.status).send({
+        error: { message: 'Algo deu errado ao atualizar seus dados' }
+      })
+    }
   }
 
   /**
@@ -50,7 +56,13 @@ class ContatoController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show({ params, request, response, view }) {}
+  async show({ params }) {
+    const contatos = await Contato.query()
+      .where(`nome`, 'ilike', '%' + params.id.toLowerCase() + '%')
+      .fetch()
+
+    return contatos
+  }
 
   /**
    * Update contato details.
@@ -70,7 +82,17 @@ class ContatoController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy({ params, request, response }) {}
+  async destroy({ params, response }) {
+    try {
+      const contato = await Contato.findOrFail(params.id)
+
+      await contato.delete()
+    } catch (error) {
+      return response.status(error.status).send({
+        error: { message: 'Não conseguimos encontrar o id do telefone.' }
+      })
+    }
+  }
 }
 
 module.exports = ContatoController
