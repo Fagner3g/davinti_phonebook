@@ -5,13 +5,13 @@ const Schema = use('Schema')
 
 class TelefoneSchema extends Schema {
   up() {
-    this.create('telefone', (table) => {
+    this.create('telefones', (table) => {
       table.increments()
       table
         .integer('contato_id', 14)
         .unsigned()
         .references('id')
-        .inTable('contato')
+        .inTable('contatoes')
         .onUpdate('CASCADE')
         .onDelete('CASCADE')
       table.varchar('telefone', 16)
@@ -20,7 +20,7 @@ class TelefoneSchema extends Schema {
   }
 
   down() {
-    this.drop('telefone')
+    this.drop('telefones')
   }
 }
 

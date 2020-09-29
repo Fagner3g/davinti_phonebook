@@ -1,10 +1,11 @@
 'use strict'
 
+/** @type {import('@adonisjs/lucid/src/Schema')} */
 const Schema = use('Schema')
 
-class ContatoSchema extends Schema {
+class ContatosSchema extends Schema {
   up() {
-    this.create('contato', (table) => {
+    this.create('contatoes', (table) => {
       table.increments()
       table.string('nome', 100).notNullable()
       table.integer('idade', 3)
@@ -13,8 +14,8 @@ class ContatoSchema extends Schema {
   }
 
   down() {
-    this.drop('contato')
+    this.drop('contatoes')
   }
 }
 
-module.exports = ContatoSchema
+module.exports = ContatosSchema
