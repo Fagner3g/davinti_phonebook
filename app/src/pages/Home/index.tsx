@@ -48,9 +48,13 @@ const Home: React.FC = () => {
         renderItem={({ item }) => (
           <ListItem
             data={item}
-            handleLeft={() => navigation.navigate('Edit')}
             handleRight={() => setIsModalVisible(!isModalVisible)}
-            onPress={() => navigation.navigate('Edit')}
+            handleLeft={() =>
+              navigation.reset({ routes: [{ name: 'Details', params: item }] })
+            }
+            onPress={() =>
+              navigation.reset({ routes: [{ name: 'Details', params: item }] })
+            }
           />
         )}
         ItemSeparatorComponent={() => <S.Separator />}

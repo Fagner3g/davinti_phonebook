@@ -6,7 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Preload from '~/pages/Preload';
 import Home from '~/pages/Home';
 import About from '~/pages/About';
-import Edit from '~/pages/Edit';
+import Details from '~/pages/Details';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -20,7 +20,7 @@ function EditScreen() {
       }}
     >
       <Stack.Screen name="Home" component={Home} />
-      <Stack.Screen name="Edit" component={Edit} />
+      <Stack.Screen name="Details" component={Details} />
     </Stack.Navigator>
   );
 }

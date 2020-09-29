@@ -1,5 +1,6 @@
-import styled, { css } from 'styled-components/native';
+import styled from 'styled-components/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { TextInputMask, TextInputMaskProps } from 'react-native-masked-text';
 
 import TextBase from '~/components/Text';
 
@@ -11,6 +12,12 @@ export const TextArea = styled.View<{ onFocus: boolean; enabled?: boolean }>`
   justify-content: center;
   border-radius: 30px;
   border: 0.9px solid ${({ onFocus }) => (onFocus ? '#ddd' : 'white')};
+`;
+
+export const InputMask = styled(TextInputMask)<TextInputMaskProps>`
+  margin-left: 20px;
+  padding: 10px;
+  font-size: 15px;
 `;
 
 export const TextInput = styled.TextInput`
