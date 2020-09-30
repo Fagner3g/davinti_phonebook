@@ -57,9 +57,15 @@ class ContatoController {
    * @param {View} ctx.view
    */
   async show({ params }) {
-    const contatos = await Contato.query()
-      .where(`nome`, 'ilike', '%' + params.id.toLowerCase() + '%')
-      .fetch()
+    let contatos = []
+    if (isNaN(params.id))
+      contatos = await Contato.query()
+        .where(`nome`, 'ilike', '%' + params.id.toLowerCase() + '%')
+        .fetch()
+    else {
+      contatos = await Contato.findOrFail(params.id)
+      await contatos.load('telefones')
+    }
 
     return contatos
   }
