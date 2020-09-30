@@ -17,6 +17,7 @@ export interface IContatoProps {
       id: number;
       contato_id: number;
       telefone: string;
+      save: boolean;
     }
   ];
 }
