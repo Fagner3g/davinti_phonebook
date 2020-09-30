@@ -7,6 +7,7 @@ module.exports = {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',
     __DEV__: 'readonly',
+    alert: 'readonly',
   },
   parser: 'babel-eslint',
   parserOptions: {

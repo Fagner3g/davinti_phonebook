@@ -67,6 +67,16 @@ const Home: React.FC = () => {
   return (
     <S.Container>
       <QuizModal />
+      <S.AreaIcon>
+        <S.IconNewContato
+          name="user-plus"
+          onPress={() =>
+            navigation.reset({
+              routes: [{ name: 'Details', params: { edit: false } }],
+            })
+          }
+        />
+      </S.AreaIcon>
       <FlatList
         data={contatos}
         keyExtractor={(item) => `${item.id}`}
@@ -76,7 +86,9 @@ const Home: React.FC = () => {
             handleRight={() => setIsModalVisible(!isModalVisible)}
             handleLeft={() =>
               navigation.reset({
-                routes: [{ name: 'Details', params: { item, edit: true } }],
+                routes: [
+                  { name: 'Details', params: { id: item.id, edit: true } },
+                ],
               })
             }
             onPress={() => Linking.openURL(`tel://${item.telefones[0]}`)}

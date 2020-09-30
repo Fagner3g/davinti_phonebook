@@ -6,6 +6,10 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 export const Container = styled.SafeAreaView``;
 
+export const UserArea = styled.View`
+  margin: 10px;
+`;
+
 export const Input = styled(InputBase)`
   margin-top: 10px;
 `;
@@ -20,11 +24,12 @@ export const Button = styled(ButtonBase)`
 `;
 
 export const AreaIconSave = styled.View`
-  flex-direction: row-reverse;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 export const IconSave = styled(MaterialIcons)`
   font-size: 30px;
-  color: green;
   padding: 5px;
 `;

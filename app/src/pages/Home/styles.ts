@@ -2,6 +2,8 @@ import styled from 'styled-components/native';
 import ButtonBase from '~/components/Button';
 import TextBase from '~/components/Text';
 
+import Feather from 'react-native-vector-icons/Feather';
+
 export const Container = styled.SafeAreaView``;
 
 export const Button = styled(ButtonBase)`
@@ -29,4 +31,15 @@ export const Text = styled(TextBase)`
 export const ButtonArea = styled.View`
   flex-direction: row;
   margin-top: 10px;
+`;
+
+export const AreaIcon = styled.View`
+  flex-direction: row-reverse;
+  border: 1px solid;
+`;
+
+export const IconNewContato = styled(Feather)`
+  font-size: 26px;
+  padding: 7px;
+  margin: 10px;
 `;

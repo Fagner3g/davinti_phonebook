@@ -1,114 +1,86 @@
-import React, { useState } from 'react';
-import { TextInputMaskProps } from 'react-native-masked-text';
-import {
-  Container,
-  Icon,
-  TextInput,
-  Label,
-  TextArea,
-  InputMask,
-  IconDelArea,
-} from './styles';
+import React, {
+  useEffect,
+  useRef,
+  useImperativeHandle,
+  forwardRef,
+  useState,
+  useCallback,
+} from 'react';
+import { TextInputProps } from 'react-native';
+import { useField } from '@unform/core';
 
-interface IInputMaskProps extends TextInputMaskProps {
-  icon?: string;
-  label?: string;
-  style?: any;
-  enabled?: boolean;
-  defaultValue?: string;
-  keyboardType?: any;
-  maxLength?: number;
-  actionIcons?: boolean;
-  actionIconSaveActive?: boolean;
-  refInput?: any;
-  actionIconPlus: (text: string | undefined) => void;
-  actionIconEdit: () => void;
-  actionIconDel: () => void;
-  onChange: () => void;
+import { Container, TextInput, Icon } from './styles';
+
+interface InputProps extends TextInputProps {
+  name: string;
+  icon: string;
 }
 
-const Input: React.FC<IInputMaskProps> = ({
-  icon,
-  label,
-  style,
-  enabled,
-  defaultValue,
-  keyboardType,
-  type,
-  maxLength,
-  actionIcons,
-  actionIconSaveActive,
-  actionIconPlus,
-  actionIconEdit,
-  actionIconDel,
-  onChange,
-}) => {
-  const [onFocus, setOnFocus] = useState(false);
-  const [value, setValue] = useState(defaultValue);
+interface InputValueReference {
+  value: string;
+}
 
-  function RenderInput() {
-    return (
-      <TextInput
-        onFocus={() => setOnFocus(true)}
-        onBlur={() => setOnFocus(false)}
-        editable={enabled}
-        value={value}
-        onChangeText={(text) => setValue(text)}
-        keyboardType={keyboardType}
-        maxLength={maxLength}
-        onChange={onChange}
-      />
-    );
-  }
+const Input: React.FC<InputProps> = ({ name, icon, ...rest }, ref) => {
+  const inputElementRef = useRef<any>(null);
+  const { registerField, defaultValue = '', fieldName, error } = useField(name);
+  const inputValueRef = useRef<InputValueReference>({ value: defaultValue });
 
-  function RenderInputMask() {
-    return (
-      <InputMask
-        onFocus={() => setOnFocus(true)}
-        onBlur={() => setOnFocus(false)}
-        editable={enabled}
-        value={value}
-        keyboardType={keyboardType}
-        includeRawValueInChangeText={true}
-        type={type}
-        onChangeText={(_, rawText) => setValue(rawText)}
-        maxLength={maxLength}
-        onChange={onChange}
-      />
-    );
-  }
+  const [isFocused, setIsFocused] = useState(false);
+  const [isFilled, setIsFilled] = useState(false);
+
+  const handleInputFocus = useCallback(() => {
+    setIsFocused(true);
+  }, []);
+
+  const handleInputBlur = useCallback(() => {
+    setIsFocused(false);
+
+    setIsFilled(!!inputValueRef.current.value);
+  }, []);
+
+  useImperativeHandle(ref, () => ({
+    focus() {
+      inputElementRef.current.focus();
+    },
+  }));
+
+  useEffect(() => {
+    registerField<string>({
+      name: fieldName,
+      ref: inputValueRef.current,
+      path: 'value',
+      setValue(ref: any, value) {
+        inputValueRef.current.value = value;
+        inputElementRef.current.setNativeProps({ text: value });
+      },
+      clearValue() {
+        inputValueRef.current.value = '';
+        inputElementRef.current.clear();
+      },
+    });
+  }, [fieldName, registerField]);
 
   return (
-    <Container style={style}>
-      {label && <Label>{label}</Label>}
-      <TextArea onFocus={onFocus} enabled={enabled}>
-        {icon && <Icon name={icon} />}
-        {actionIcons && (
-          <IconDelArea>
-            {actionIconSaveActive && (
-              <Icon
-                name="edit"
-                color="#f58220"
-                onPress={() => actionIconEdit(value)}
-              />
-            )}
-            <Icon
-              name={actionIconSaveActive ? 'add' : 'save'}
-              color="#009835"
-              onPress={() => actionIconPlus(value)}
-            />
-            <Icon
-              name={actionIconSaveActive ? 'delete' : 'close'}
-              color="#ff0000"
-              onPress={actionIconDel}
-            />
-          </IconDelArea>
-        )}
-        {!type && RenderInput()}
-        {type && RenderInputMask()}
-      </TextArea>
+    <Container isFocused={isFocused} isErrored={!!error}>
+      <Icon
+        name={icon}
+        size={20}
+        color={isFocused || isFilled ? '#ff9000' : '#666360'}
+      />
+      <TextInput
+        ref={inputElementRef}
+        keyboardAppearance="dark"
+        placeholderTextColor="#666360"
+        defaultValue={defaultValue}
+        onFocus={handleInputFocus}
+        onBlur={handleInputBlur}
+        onChangeText={(value) => {
+          inputValueRef.current.value = value;
+        }}
+        {...rest}
+      />
     </Container>
   );
 };
 
-export default Input;
+export default forwardRef(Input);

@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { Platform, ScrollView } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { Form } from '@unform/mobile';
 
 import api from '~/services';
 
@@ -9,35 +11,27 @@ import Loading from '~/components/Loading';
 import Header from '~/components/Header';
 import { IContatoProps } from '~/pages/Home';
 
-import { Container, InputArea, Input, AreaIconSave, IconSave } from './styles';
+import { Container, UserArea, Input, AreaIconSave, IconSave } from './styles';
 
 const Details: React.FC = ({ route: { params } }) => {
-  const { id }: IContatoProps = params.item;
-  const [isEditable, setIsEditable] = useState(params.edit);
-  const [newPhone, setNewPhone] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [nome, setNome] = useState('');
-  const [idade, setIdade] = useState('');
-  const [contato, setContato] = useState<IContatoProps>({
-    id: 0,
-    idade: '0',
-    nome: '',
-    telefones: [{ id: 1, telefone: '', contato_id: 0 }],
-  });
+  const [contato, setContato] = useState<IContatoProps>({});
+  const formRef = useRef(null);
+  const [loading, setLoading] = useState(false);
+  const navigation = useNavigation();
 
   useEffect(() => {
-    getData();
+    if (params.edit) getData();
   }, []);
 
   async function getData() {
     try {
-      const resp = await api.get(`/contato/${id}`);
-
+      const resp = await api.get(`/contato/${params.id}`);
       if (resp.data.telefones.length === 0) {
         resp.data.telefones = [{ save: false }];
       } else {
-        resp.data.telefones.map((item) => (item.save = true));
+        resp.data.telefones.map((item: any) => (item.save = true));
       }
+      resp.data.idade = `${resp.data.idade}`;
       setContato(resp.data);
       setLoading(false);
     } catch (error) {
@@ -47,7 +41,6 @@ const Details: React.FC = ({ route: { params } }) => {
 
   function handleNewPhone() {
     contato.telefones.push({ save: false });
-    setNewPhone(true);
   }
 
   function handleDelPhone(idPhone: number | undefined) {
@@ -58,7 +51,6 @@ const Details: React.FC = ({ route: { params } }) => {
 
   function handleSavePhone(phone: string) {
     api.post('telefone', { contato_id: id, telefone: phone });
-    setNewPhone(false);
     getData();
   }
 
@@ -68,23 +60,87 @@ const Details: React.FC = ({ route: { params } }) => {
     console.log('entrei');
   }
 
-  function handleSaveContato() {}
+  async function handleSaveContato({ nome, idade }: any) {
+    if (nome && idade) {
+      setLoading(true);
+      await api.post('/contato', { nome, idade });
+      setLoading(false);
+      navigation.reset({ routes: [{ name: 'Home' }] });
+    } else {
+      console.log(nome, idade);
+      alert('Nome é idade são obrigatórios');
+    }
+  }
+
+  async function handleDelContato() {
+    setLoading(true);
+    await api.delete(`/contato/${contato.id}`);
+    setLoading(false);
+    navigation.reset({ routes: [{ name: 'Home' }] });
+  }
 
   return (
     <Container>
-      <Header title="Detalhes" />
+      <Header title={params.edit ? 'Detalhes' : 'Novo Contato'} />
       {loading && <Loading />}
       {!loading && (
         <ScrollView>
-          <InputArea>
-            <AreaIconSave>
-              <IconSave name="save" onPress={handleSaveContato} />
-            </AreaIconSave>
+          <UserArea>
+            <Form
+              onSubmit={handleSaveContato}
+              initialData={contato}
+              ref={formRef}
+            >
+              <AreaIconSave>
+                <Text>
+                  {params.edit ? 'Detalhes do contato' : 'Preencha os campos'}
+                </Text>
+                <AreaIconSave>
+                  {params.edit && (
+                    <IconSave name={'delete'} onPress={handleDelContato} />
+                  )}
+                  <IconSave
+                    name={'save'}
+                    onPress={() => formRef.current.submitForm()}
+                  />
+                </AreaIconSave>
+              </AreaIconSave>
+              <Input
+                autoCorrect={false}
+                autoCapitalize="words"
+                name="nome"
+                icon="user"
+                placeholder="Nome"
+                returnKeyType="next"
+              />
+              <Input
+                autoCapitalize="words"
+                name="idade"
+                icon="award"
+                placeholder="Idade"
+                returnKeyType="next"
+                keyboardType="numeric"
+                maxLength={3}
+              />
+            </Form>
+          </UserArea>
+
+          {/* <InputArea>
+            {
+              <AreaIconSave>
+                <IconSave
+                  name={isEditable ? 'save' : 'edit'}
+                  onPress={handleSaveContato}
+                />
+              </AreaIconSave>
+            }
             <Text>Detalhes do contato</Text>
             <Input
               label="Nome:"
               defaultValue={contato.nome}
               enabled={isEditable}
+              onChangeText={(text) => setNome(text)}
+              onChange={onChange}
             />
             <Input
               label="Idade:"
@@ -95,6 +151,8 @@ const Details: React.FC = ({ route: { params } }) => {
                 Platform.OS === 'android' ? 'numeric' : 'number-pad'
               }
               type="only-numbers"
+              onChangeText={(text) => setIdade(text)}
+              onChange={onChange}
             />
             {contato.telefones.map((item) => {
               return (
@@ -112,11 +170,10 @@ const Details: React.FC = ({ route: { params } }) => {
                   actionIconDel={() => handleDelPhone(item.id)}
                   actionIconEdit={handleEditPhone}
                   actionIconSaveActive={item.save}
-                  onChange={onChange}
                 />
               );
             })}
-          </InputArea>
+          </InputArea> */}
         </ScrollView>
       )}
     </Container>
