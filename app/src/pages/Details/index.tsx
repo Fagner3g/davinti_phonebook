@@ -42,7 +42,10 @@ const Details: React.FC = ({ route: { params } }) => {
 
       // Conversão para string necessária para inputs não aceitarem inteiro.
       resp.data.idade = `${resp.data.idade}`;
-      resp.data.telefones.map((item) => (item.id = item.id.toString()));
+
+      if (resp.data.telefones.length === 0) {
+        resp.data.telefones = [{}];
+      } else resp.data.telefones.map((item) => (item.id = item.id.toString()));
 
       setContato(resp.data);
       setLoading(false);
@@ -130,31 +133,31 @@ const Details: React.FC = ({ route: { params } }) => {
                 keyboardType="numeric"
                 maxLength={3}
               />
-              {contato.telefones &&
-                contato.telefones.map((item, index) => {
-                  return (
-                    <Scope path={`telefones[${index}]`}>
-                      <InputPhoneArea>
-                        <Input
-                          key={item.id}
-                          ref={inputRef}
-                          autoCapitalize="words"
-                          name={`telefone`}
-                          icon="phone"
-                          defaultValue={item.telefone}
-                          placeholder="telefone"
-                          returnKeyType="next"
-                          keyboardType="numeric"
-                          maxLength={16}
-                        />
-                        <IconArea>
-                          <IconPhonePlus name="add" onPress={handleNewPhone} />
-                        </IconArea>
-                        {params.edit && <Input key={item.id + 1} name="id" />}
-                      </InputPhoneArea>
-                    </Scope>
-                  );
-                })}
+              {contato.telefones.map((item, index) => {
+                return (
+                  <Scope path={`telefones[${index}]`}>
+                    <InputPhoneArea>
+                      <Input
+                        key={item.id}
+                        ref={inputRef}
+                        autoCapitalize="words"
+                        name={`telefone`}
+                        icon="phone"
+                        defaultValue={item.telefone}
+                        placeholder="telefone"
+                        returnKeyType="next"
+                        keyboardType="numeric"
+                        maxLength={16}
+                        type="cel-phone"
+                      />
+                      <IconArea>
+                        <IconPhonePlus name="add" onPress={handleNewPhone} />
+                      </IconArea>
+                      {params.edit && <Input key={item.id + 1} name="id" />}
+                    </InputPhoneArea>
+                  </Scope>
+                );
+              })}
             </Form>
           </UserArea>
         </ScrollView>

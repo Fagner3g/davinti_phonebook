@@ -5,6 +5,7 @@
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
 const Contato = use('App/Models/Contato')
+const Telefone = use('App/Models/Telefone')
 
 /**
  * Resourceful controller for interacting with contatoes
@@ -20,7 +21,10 @@ class ContatoController {
    * @param {View} ctx.view
    */
   async index() {
-    const contatos = await Contato.query().with('telefones').fetch()
+    const contatos = await Contato.query()
+      .with('telefones')
+      .orderBy('nome', 'asc')
+      .fetch()
 
     return contatos
   }
@@ -35,9 +39,22 @@ class ContatoController {
    */
   async store({ request, response }) {
     try {
-      const data = request.only(['nome', 'idade'])
+      const { nome, idade, telefones } = request.all()
 
-      const contato = await Contato.create({ ...data })
+      const contato = await Contato.create({
+        nome: nome,
+        idade: idade
+      })
+
+      if (telefones.length > 0) {
+        telefones.forEach(async (element) => {
+          if (element.telefone !== '')
+            await Telefone.create({
+              contato_id: contato.id,
+              telefone: element.telefone
+            })
+        })
+      }
 
       return contato
     } catch (error) {
@@ -78,7 +95,40 @@ class ContatoController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update({ params, request, response }) {}
+  async update({ params, request, response }) {
+    try {
+      const { nome, idade, telefones } = request.all()
+
+      const contato = await Contato.findOrFail(params.id)
+      contato.merge({ nome, idade })
+      await contato.save()
+
+      telefones.forEach(async (el) => {
+        if (el.telefone !== '') {
+          if (el.id === '') el.id = 0.0
+          const telefone = await Telefone.findOrCreate(
+            { id: el.id },
+            { telefone: '123456', contato_id: contato.id }
+          )
+          telefone.merge({
+            telefone: el.telefone
+          })
+
+          telefone.save()
+        } else if (el.id !== '') {
+          const telefone = await Telefone.findOrFail(el.id)
+
+          telefone.delete()
+        }
+      })
+
+      return contato
+    } catch (error) {
+      return response.status(error.status).send({
+        error: { message: 'Algo deu errado ao atualizar seus dados' }
+      })
+    }
+  }
 
   /**
    * Delete a contato with id.

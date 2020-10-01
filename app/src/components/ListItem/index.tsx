@@ -78,13 +78,15 @@ const ListItem: React.FC<IProps> = ({
       <Container onPress={onPress}>
         <TextArea>
           <Text size="17px">{data.nome}</Text>
-          {data.telefones[0]?.telefone && (
-            <PhoneMask
-              value={data.telefones[0].telefone}
-              type="cel-phone"
-              editable={false}
-            />
-          )}
+          {data.telefones &&
+            data.telefones[0]?.telefone !== '' &&
+            data.telefones[0]?.telefone && (
+              <PhoneMask
+                value={data.telefones[0].telefone}
+                type="cel-phone"
+                editable={false}
+              />
+            )}
         </TextArea>
       </Container>
     </Swipeable>
