@@ -31,6 +31,7 @@ interface IListContato {
 const Home: React.FC = () => {
   const navigation = useNavigation();
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [idContatoSelected, setIdContatoSelected] = useState(0);
   const [contatos, setContatos] = useState<IListContato[]>();
   const formRef = useRef(null);
 
@@ -59,23 +60,34 @@ const Home: React.FC = () => {
             Tem certeza que deseja excluir este contato?
           </S.Text>
           <S.ButtonArea>
-            <S.Button text="Sim" color="#399e2d" onPress={() => {}} />
             <S.Button
               text="Não"
-              color="#ff4c4c"
-              onPress={() => setIsModalVisible(!isModalVisible)}
+              color="#399e2d"
+              onPress={() => setIsModalVisible(false)}
             />
+            <S.Button text="Sim" color="#ff4c4c" onPress={handleDelete} />
           </S.ButtonArea>
         </S.ModalArea>
       </Modal>
     );
   }
 
-  function handleSubmit({ search }) {
+  async function handleSubmit({ search }) {
     console.log(search);
-    api.get(`/contato/${search}`).then((res) => {
+    await api.get(`/contato/${search}`).then((res) => {
       setContatos(res.data);
     });
+  }
+
+  async function handleDelete() {
+    await api.delete(`/contato/${idContatoSelected}`);
+    getContatos();
+    setIsModalVisible(false);
+  }
+
+  function handleModal(id: number) {
+    setIdContatoSelected(id);
+    setIsModalVisible(true);
   }
 
   return (
@@ -108,7 +120,7 @@ const Home: React.FC = () => {
         renderItem={({ item }) => (
           <ListItem
             data={item}
-            handleRight={() => setIsModalVisible(!isModalVisible)}
+            handleRight={() => handleModal(item.id)}
             handleLeft={() =>
               navigation.reset({
                 routes: [
