@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FlatList, Linking } from 'react-native';
 import Modal from 'react-native-modal';
 import { useNavigation } from '@react-navigation/native';
+import { Form } from '@unform/mobile';
 import api from '~/services';
 
 import ListItem from '~/components/ListItem';
@@ -21,10 +22,17 @@ export interface IContatoProps {
   ];
 }
 
+interface IListContato {
+  id: number;
+  nome: string;
+  telefone: string;
+}
+
 const Home: React.FC = () => {
   const navigation = useNavigation();
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [contatos, setContatos] = useState<IContatoProps[]>();
+  const [contatos, setContatos] = useState<IListContato[]>();
+  const formRef = useRef(null);
 
   useEffect(() => {
     getContatos();
@@ -63,10 +71,27 @@ const Home: React.FC = () => {
     );
   }
 
+  function handleSubmit({ search }) {
+    console.log(search);
+    api.get(`/contato/${search}`).then((res) => {
+      setContatos(res.data);
+    });
+  }
+
   return (
     <S.Container>
       <QuizModal />
       <S.AreaIcon>
+        <S.InputArea>
+          <Form onSubmit={handleSubmit} ref={formRef}>
+            <S.InputSearch
+              name="search"
+              icon="search"
+              autoCapitalize="words"
+              onKeyPress={() => formRef.current.submitForm()}
+            />
+          </Form>
+        </S.InputArea>
         <S.IconNewContato
           name="user-plus"
           onPress={() =>
@@ -76,6 +101,7 @@ const Home: React.FC = () => {
           }
         />
       </S.AreaIcon>
+
       <FlatList
         data={contatos}
         keyExtractor={(item) => `${item.id}`}
@@ -90,7 +116,7 @@ const Home: React.FC = () => {
                 ],
               })
             }
-            onPress={() => Linking.openURL(`tel://${item.telefones[0]}`)}
+            onPress={() => Linking.openURL(`tel://${item.telefone}`)}
           />
         )}
         ItemSeparatorComponent={() => <S.Separator />}

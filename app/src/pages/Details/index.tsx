@@ -38,7 +38,7 @@ const Details: React.FC = ({ route: { params } }) => {
 
   async function getData() {
     try {
-      const resp = await api.get(`/contato/${params.id}`);
+      const resp = await api.get(`/contato/byid/${params.id}`);
 
       // Conversão para string necessária para inputs não aceitarem inteiro.
       resp.data.idade = `${resp.data.idade}`;
@@ -135,10 +135,9 @@ const Details: React.FC = ({ route: { params } }) => {
               />
               {contato.telefones.map((item, index) => {
                 return (
-                  <Scope path={`telefones[${index}]`}>
+                  <Scope key={item.id} path={`telefones[${index}]`}>
                     <InputPhoneArea>
                       <Input
-                        key={item.id}
                         ref={inputRef}
                         autoCapitalize="words"
                         name={`telefone`}
@@ -146,9 +145,8 @@ const Details: React.FC = ({ route: { params } }) => {
                         defaultValue={item.telefone}
                         placeholder="telefone"
                         returnKeyType="next"
-                        keyboardType="numeric"
+                        keyboardType="number-pad"
                         maxLength={16}
-                        type="cel-phone"
                       />
                       <IconArea>
                         <IconPhonePlus name="add" onPress={handleNewPhone} />

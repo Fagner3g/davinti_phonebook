@@ -1,6 +1,7 @@
 import styled from 'styled-components/native';
 import ButtonBase from '~/components/Button';
 import TextBase from '~/components/Text';
+import InputBase from '~/components/Input';
 
 import Feather from 'react-native-vector-icons/Feather';
 
@@ -34,8 +35,8 @@ export const ButtonArea = styled.View`
 `;
 
 export const AreaIcon = styled.View`
-  flex-direction: row-reverse;
-  border: 1px solid;
+  flex-direction: row;
+  justify-content: space-between;
 `;
 
 export const IconNewContato = styled(Feather)`
@@ -43,3 +44,10 @@ export const IconNewContato = styled(Feather)`
   padding: 7px;
   margin: 10px;
 `;
+
+export const InputArea = styled.View`
+  padding-left: 15px;
+  width: 330px;
+`;
+
+export const InputSearch = styled(InputBase)``;
