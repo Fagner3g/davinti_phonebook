@@ -9,15 +9,14 @@ import ListItem from '~/components/ListItem';
 import * as S from './styles';
 
 export interface IContatoProps {
-  id: number;
+  id: string;
   nome: string;
   idade: string;
   telefones: [
     {
-      id: number;
-      contato_id: number;
+      id: string;
+      contato_id: string;
       telefone: string;
-      save: boolean;
     }
   ];
 }

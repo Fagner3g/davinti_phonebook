@@ -14,11 +14,6 @@ export const Input = styled(InputBase)`
   margin-top: 10px;
 `;
 
-export const InputArea = styled.SafeAreaView`
-  margin: 10px;
-  margin-bottom: 60px;
-`;
-
 export const Button = styled(ButtonBase)`
   margin-top: 30px;
 `;
@@ -32,4 +27,20 @@ export const AreaIconSave = styled.View`
 export const IconSave = styled(MaterialIcons)`
   font-size: 30px;
   padding: 5px;
+  color: #515151;
+`;
+
+export const IconPhonePlus = styled(MaterialIcons)`
+  font-size: 30px;
+  padding: 5px;
+  color: #515151;
+`;
+
+export const InputPhoneArea = styled.View`
+  flex-direction: row;
+  width: 87%;
+`;
+
+export const IconArea = styled.View`
+  margin: 10px;
 `;
