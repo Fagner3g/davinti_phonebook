@@ -7,6 +7,7 @@
 const Contato = use('App/Models/Contato')
 const Telefone = use('App/Models/Telefone')
 const Database = use('Database')
+const Logger = use('Logger')
 
 /**
  * Resourceful controller for interacting with contatoes
@@ -169,11 +170,15 @@ class ContatoController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy({ params, response }) {
+  async destroy({ params, response, request }) {
     try {
       const contato = await Contato.findOrFail(params.id)
 
       await contato.delete()
+      Logger.transport('file').info(
+        `o usuário 'X' apagou o contato id ${params.id}`,
+        request.url()
+      )
     } catch (error) {
       return response.status(error.status).send({
         error: { message: 'Não conseguimos encontrar o id do telefone.' }
