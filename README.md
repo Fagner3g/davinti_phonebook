@@ -89,6 +89,8 @@ Esse projeto foi desenvolvido utilizando os seguintes recursos:
 - [TypeScript](https://www.typescriptlang.org/);
 - [Yup](https://github.com/jquense/yup).
 - [UnForm](https://unform.dev/)
+- [AdonisJs](https://adonisjs.com/)
+- [Postgres](https://www.postgresql.org/)
 
 ### :memo: License
 
