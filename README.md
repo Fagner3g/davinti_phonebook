@@ -96,4 +96,4 @@ Esse projeto está sob MIT license.
 
 ---
 
-Feito por Bela Ferreira :blue_heart: Contato: https://www.linkedin.com/in/fagneregomes/ :blush:
+Fagner Gomes :blue_heart: Contato: https://www.linkedin.com/in/fagneregomes/ :blush:
