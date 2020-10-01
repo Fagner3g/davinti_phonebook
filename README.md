@@ -64,6 +64,18 @@ git clone https://github.com/Fagner3g/davinti_phonebook.git
 
 `Certifique que existe um banco postgres online no seu ambiente, o arquivo .env encontra-se no projeto`
 
+2. Para iniciar o App é necessario que sua maquina esteja previamente configurada para rodar o emulador android/IOs. [Tutorial](https://react-native.rocketseat.dev/)
+
+```bash
+ # Entre na pasta app e instale as dependências
+ yarn install
+
+ # iniciando a aplicação
+ yarn ios
+ #   ou
+ yarn android
+```
+
 ### :wrench: Tecnologias | Ferramentas | Recursos
 
 Esse projeto foi desenvolvido utilizando os seguintes recursos:
